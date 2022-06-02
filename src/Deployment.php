@@ -10,21 +10,7 @@ class Deployment
 
     public function __construct()
     {
-        $filePath = config('deployment.file');
-
-        if (! file_exists($filePath)) {
-            throw new DeploymentFileNotFoundException("The file `{$filePath}` does not exist.");
-        }
-
-        $content = file_get_contents(config('deployment.file'));
-        $parsed = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
-
-        $this->version = new Version(
-            username: $this->checkForEmptyValues($parsed['username']),
-            version: $this->checkForEmptyValues($parsed['version']),
-            repository: $this->checkForEmptyValues($parsed['repository']),
-            revision: $this->checkForEmptyValues($parsed['revision']),
-        );
+        $this->parseDeploymentFile();
     }
 
     public function get(): Version
@@ -59,5 +45,35 @@ class Deployment
         }
 
         return $value;
+    }
+
+    public function parseDeploymentFile(): void
+    {
+        $filePath = config('deployment.file');
+
+        if (is_null($filePath)) {
+            $this->version = new Version(
+                username: null,
+                version: null,
+                repository: null,
+                revision: null,
+            );
+
+            return;
+        }
+
+        if (! file_exists($filePath)) {
+            throw new DeploymentFileNotFoundException("The file `{$filePath}` does not exist.");
+        }
+
+        $content = file_get_contents(config('deployment.file'));
+        $parsed = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
+
+        $this->version = new Version(
+            username: $this->checkForEmptyValues($parsed['username']),
+            version: $this->checkForEmptyValues($parsed['version']),
+            repository: $this->checkForEmptyValues($parsed['repository']),
+            revision: $this->checkForEmptyValues($parsed['revision']),
+        );
     }
 }
