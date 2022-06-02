@@ -40,6 +40,21 @@ return [
 ];
 ```
 
+## Deployment.json file
+
+The `deployment.json` we use, looks like this
+
+```json
+{
+    "revision": "123456789",
+    "version": "v1.4.0",
+    "repository": "http://url-to.repository",
+    "username": "User Name"
+}
+```
+
+The package expects the file to match the format, to be able to parse it.
+
 ## Usage
 
 Get the version number
