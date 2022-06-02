@@ -12,6 +12,5 @@ return [
     |
     */
 
-    // base_path() . '/deployment.json'
-    'file' => null,
+    'file' => env('DEPLOYMENT_JSON_FILE_PATH'),
 ];
