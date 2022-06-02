@@ -5,11 +5,24 @@ use Morningtrain\Deployment\Facades\Deployment;
 use Morningtrain\Deployment\Version;
 
 test('if no file found it throws an exception', function () {
+    config()->set('deployment.file', 'missing-deployment-file.json');
+
     $filePath = config('deployment.file');
     $exceptionMessage = "The file `{$filePath}` does not exist.";
 
     expect(fn() => new \Morningtrain\Deployment\Deployment())
         ->toThrow(DeploymentFileNotFoundException::class, $exceptionMessage);
+});
+
+test('if deployment file is not specified it returns null-something', function () {
+    config()->set('deployment.file');
+
+    expect(Deployment::get())->toMatchObject(new Version(
+        username: null,
+        version: null,
+        repository: null,
+        revision: null
+    ));
 });
 
 it('can retrieve version data from deployment.json file', function () {
