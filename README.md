@@ -36,7 +36,8 @@ return [
     |
     */
 
-    'file' => base_path() . '/deployment.json',
+    // base_path() . '/deployment.json'
+    'file' => null,
 ];
 ```
 
